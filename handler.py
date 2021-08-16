@@ -9,9 +9,10 @@ dynamodb = boto3.resource("dynamodb")
 
 def extractMetadata(event, context): 
     #armazenando key de event
-    key = event["Records"][0]["s3"]["object"]["key"]
+    key, bucket = event["Records"][0]["s3"]["object"]["key"], event["Records"][0]["s3"]["bucket"]["name"]
+    keybucket = {"key": key, "bucket": bucket}
     #fazendo upload da imagem usando a função getImage
-    getImage(key,"")
+    getImage(keybucket,"")
     try:       #extraindo dimensões da imagem usando exifread
         openimage = open("/tmp/imagemetadata"+key.split("/")[-1].split(".")[-1], 'rb')#tratamento para caso a imagem tenha sido diferente de jpg
         img = exifread.process_file(openimage)
@@ -56,11 +57,12 @@ def getMetadata(event,context):
         }
         return response
 def getImage(event,context):
-    s3objectkey = event
+    s3objectkey = event['key']
+    bucket = event['bucket']
     #conectando com as credenciais
-    s3 = boto3.client('s3', aws_access_key_id="AKIARRIKYGDPMDUPFQFY" , aws_secret_access_key="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")
+    s3 = boto3.client('s3', aws_access_key_id="<MYACESSKEY>" , aws_secret_access_key="MYSECRETACESSKEY")    #SETAR AWS KEY E AWS SECRET KEY
     #função para fazer o download e tratando o arquivo de destino pra caso seja diferente de jpg
-    s3.download_file("my-serveless-challenge-bucket-tester", s3objectkey, "/tmp/imagemetadata"+s3objectkey.split("/")[-1].split(".")[-1])
+    s3.download_file(bucket, s3objectkey, "/tmp/imagemetadata"+s3objectkey.split("/")[-1].split(".")[-1])
 
 def infoImages(event, context):
     table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
