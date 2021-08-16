@@ -5,16 +5,26 @@
 ```bash
 npm install -g serverless
 ```
+```bash
+sls plugin install -n serverless-python-requirements
+```
+Depois da instalação é preciso inserir os dados no `serverless.yml` como profile e app.
+
+Na linha 63 do aquivo `handler.py` deve informar as chaves de acesso:
+```bash
+s3 = boto3.client('s3', aws_access_key_id="<MYACESSKEY>" , aws_secret_access_key="MYSECRETACESSKEY")
+```
+
 
 ## Deploy
 
-É esperado um resultado a seguir: 
+Estando configurado basta fazer o deploy 
 
 ```bash
 serverless deploy
 ```
 
-The expected result should be similar to:
+É esperado um resultado como esse:
 
 ```bash
 Service Information
@@ -41,17 +51,17 @@ Serverless: Successfully published your service to the Serverless Dashboard: htt
 ```
 ## Usage
 
-Necessita-se alterar uma pasta no seu [`amazon s3`](https://s3.console.aws.amazon.com/s3/home), no caso você precisa criar uma pasta chamada "upload" para poder enviar as suas imagens. Lembrando que se necessita setar o seu bucket no seu `serverless.yml`
+Necessita-se alterar uma pasta no seu [`amazon s3`](https://s3.console.aws.amazon.com/s3/home), no caso você precisa criar uma pasta chamada "upload" para poder enviar as suas imagens. Lembrando que necessita-se setar o seu bucket no seu `serverless.yml`
 
-### extractMetadata
+### Função extractMetadata
 
 Basta carregar a imagem no seu bucket da [`amazon s3`](https://s3.console.aws.amazon.com/s3/home) na pasta upload que será inserido os metadados da `imagem na tabela serverless-challenge-dev` do [`dynamoDB`](https://console.aws.amazon.com/dynamodb/home).
 
-No output
 
-### Usando a API /images/{s3objectkey} | getMetadata
 
-Pra usar basta enviar a imagem para o [`amazon s3`](https://s3.console.aws.amazon.com/s3/home) e usa a request com o nome da sua imagem no lugar de s3objectkey.
+### Usando a API /images/{s3objectkey} | Função getMetadata
+
+Pra usar basta enviar a imagem para o [`amazon s3`](https://s3.console.aws.amazon.com/s3/home) e usar a request com o nome da sua imagem no lugar de s3objectkey.
 ```bash
 curl --request GET
    --url https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/images/{s3objectkey}
@@ -67,7 +77,7 @@ Example output:
 Essa função é sempre executada para baixar a imagem e fazer a leitura dos seus metadados pela função extractMetadata. Mas pode ser testada usando o serviço Lambda da AWS, o teste é feito usando como parâmetro sua s3objectkey.
 
 ```bash
-upload/{s3objectkey}
+{"key":"upload/{s3objectkey}","bucket":"<SEUBUCKETAQUI>"}
 ```
 
 ### infoImages
