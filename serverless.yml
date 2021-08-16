@@ -1,8 +1,8 @@
-org: adersonjunior85
-app: serverless-challenge
-service: serverless-challenge
+org: #change for your org
+app: #change for you app name
+service: #change for your service name
 
-frameworkVersion:
+frameworkVersion: ">=1.1.0"
 
 provider:
   name: aws
@@ -25,19 +25,17 @@ provider:
 functions:
   extractMetadata:
     handler: handler.extractMetadata
-    description:
     memorySize: 128
     timeout: 30
     events:
       - s3:
-          bucket: my-serveless-challenge-bucket-tester # Escolha o nome do seu bucket que deve ser único
+          bucket:   # Escolha o nome do seu bucket que deve ser único
           event: s3:ObjectCreated:*
           rules:
             - prefix: upload/
             - suffix: .jpg
   getMetadata:
     handler: handler.getMetadata
-    description:
     memorySize: 128
     timeout: 30
     events:
@@ -47,12 +45,10 @@ functions:
           cors: true
   getImage:
     handler: handler.getImage
-    description:
     memorySize: 128
     timeout: 30
   infoImages:
     handler: handler.infoImages
-    description:
     memorySize: 128
     timeout: 30
 
