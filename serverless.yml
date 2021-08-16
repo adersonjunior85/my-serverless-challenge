@@ -1,13 +1,13 @@
-org: #change for your org
-app: #change for you app name
-service: #change for your service name
+org:  #change for your org
+app:  #change for you app name
+service:  #change for your service name
 
 frameworkVersion: ">=1.1.0"
 
 provider:
   name: aws
   runtime: python3.6  # nodejs12.x
-  profile: serverless-challenge-profile
+  profile:   #set your profile
   region: us-east-1
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
@@ -29,7 +29,7 @@ functions:
     timeout: 30
     events:
       - s3:
-          bucket:   # Escolha o nome do seu bucket que deve ser único
+          bucket:  # Escolha o nome do seu bucket que deve ser único
           event: s3:ObjectCreated:*
           rules:
             - prefix: upload/
